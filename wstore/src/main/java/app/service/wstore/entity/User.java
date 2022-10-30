@@ -56,4 +56,10 @@ public class User {
         roles.remove(role);
         role.getUsers().remove(this);
     }
+
+    public User(String email, String password, String phone) {
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+    }
 }

@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,7 +37,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterDto registerDto) {
-        userService.createUser(registerDto);
+        userService.createCustomer(registerDto);
 
         return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
     }
@@ -56,9 +57,9 @@ public class AuthController {
         return new LoginResponse(jwt);
     }
 
-    // @GetMapping("/test-admin")
-    // @PreAuthorize("hasAuthority('ADMIN')")
-    // public String test() {
-    // return "admin";
+    // @GetMapping("/show-info/{id}")
+    // public ResponseEntity<UserDto> show(@PathVariable("id") int id) {
+    // return new ResponseEntity<>(userService.showUser(id), HttpStatus.OK);
     // }
+
 }
