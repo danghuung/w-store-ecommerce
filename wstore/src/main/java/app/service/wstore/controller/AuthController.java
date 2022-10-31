@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.service.wstore.dto.RegisterDto;
 import app.service.wstore.entity.CustomUserDetails;
+import app.service.wstore.exception.DuplicateRecordException;
 import app.service.wstore.jwt.JwtTokenProvider;
 import app.service.wstore.payload.LoginRequest;
 import app.service.wstore.payload.LoginResponse;
@@ -37,9 +38,15 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterDto registerDto) {
-        userService.createCustomer(registerDto);
 
-        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
+        if (userService.checkEmail(registerDto.getEmail())) {
+            throw new DuplicateRecordException("Email already is taken!");
+        } else {
+
+            userService.createCustomer(registerDto);
+
+            return new ResponseEntity<>("User Registered Successfully!", HttpStatus.CREATED);
+        }
     }
 
     @PostMapping("/login")
@@ -55,11 +62,7 @@ public class AuthController {
         String jwt = jwtTokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
 
         return new LoginResponse(jwt);
-    }
 
-    // @GetMapping("/show-info/{id}")
-    // public ResponseEntity<UserDto> show(@PathVariable("id") int id) {
-    // return new ResponseEntity<>(userService.showUser(id), HttpStatus.OK);
-    // }
+    }
 
 }

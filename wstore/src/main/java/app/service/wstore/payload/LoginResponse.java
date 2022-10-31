@@ -12,4 +12,9 @@ public class LoginResponse {
     public LoginResponse(String accessToken) {
         this.accessToken = accessToken;
     }
+
+    // public static ResponseEntity<?> ok(String accessToken) {
+    // return ResponseEntity.status(HttpStatus.OK).header("gotyouin",
+    // accessToken).body(null);
+    // }
 }

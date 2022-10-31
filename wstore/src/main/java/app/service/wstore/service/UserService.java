@@ -33,6 +33,10 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public Boolean checkEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
     public User createCustomer(RegisterDto registerDto) {
         registerDto.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         Role setRole = roleRepository.findByName("CUSTOMER");
