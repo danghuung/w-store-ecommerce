@@ -88,8 +88,8 @@ public class UserService implements UserDetailsService {
         Role roleStaff = new Role("STAFF");
 
         roleRepository.save(roleAdmin);
-        roleRepository.save(roleCustomer);
         roleRepository.save(roleStaff);
+        roleRepository.save(roleCustomer);
         roleRepository.flush();
 
         User admin = createAdmin("admin@admin.com", "1", "000000000");
