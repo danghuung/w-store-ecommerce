@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CategoryDto extends BaseEntity {
-    private int id;
 
     private String name;
 }

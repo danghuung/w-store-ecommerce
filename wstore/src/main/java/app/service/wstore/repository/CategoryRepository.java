@@ -7,7 +7,6 @@ import app.service.wstore.entity.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-    Boolean existsByName(String name);
 
-    Category findById(int id);
+    Boolean existsByName(String name);
 }

@@ -43,7 +43,7 @@ public class CategoryController {
             throw new DuplicateRecordException("Category already is taken!");
         } else {
 
-            return new ResponseEntity<>(categoryService.save(categoryDto), HttpStatus.CREATED);
+            return new ResponseEntity<>(categoryService.create(categoryDto), HttpStatus.CREATED);
         }
     }
 

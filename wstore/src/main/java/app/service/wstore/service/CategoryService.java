@@ -26,7 +26,7 @@ public class CategoryService {
     }
 
     // Create category
-    public CategoryDto save(CategoryDto categoryDto) {
+    public CategoryDto create(CategoryDto categoryDto) {
         Category categoryEntity = new Category();
         categoryEntity = modelMapper.map(categoryDto, Category.class);
         categoryRepository.save(categoryEntity);
@@ -57,9 +57,7 @@ public class CategoryService {
             categoryDto.setId(id);
             Category categoryEntity = modelMapper.map(categoryDto, Category.class);
 
-            categoryRepository.save(categoryEntity);
-
-            return modelMapper.map(categoryEntity, CategoryDto.class);
+            return modelMapper.map(categoryRepository.save(categoryEntity), CategoryDto.class);
         }
     }
 
