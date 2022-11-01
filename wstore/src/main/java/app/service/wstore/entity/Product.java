@@ -15,10 +15,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Product extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
     @Column(name = "name", nullable = false, columnDefinition = "varchar(255)")
     private String name;
 
@@ -31,12 +27,16 @@ public class Product extends BaseEntity {
     @Column(name = "desctiption", nullable = true, columnDefinition = "text")
     private String description;
 
+    @Column(columnDefinition = "text")
+    private String image;
+
     @Column(nullable = false, columnDefinition = "int default 0")
     private int inStock;
 
     @Column(name = "is_active", columnDefinition = "tinyint(1) default true")
     private Boolean isActive = true;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Category.class)
+    @JoinColumn(name = "category_id")
     private Category category;
 }
