@@ -3,8 +3,11 @@ package app.service.wstore.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,15 +25,19 @@ import lombok.Setter;
 public abstract class BaseEntity implements Serializable {
 
     @CreatedBy
+    @Column(updatable = false)
     private int createdBy;
 
     @CreatedDate
+    @Column(updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
     @LastModifiedBy
     private int updatedBy;
 
     @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
 
 }
