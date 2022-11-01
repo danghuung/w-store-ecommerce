@@ -37,11 +37,11 @@ public class User {
     @Column(name = "birthday", nullable = true, columnDefinition = "varchar(255)")
     private String birthday;
 
-    @Column(name = "gender", nullable = true, columnDefinition = "boolean default true")
-    private boolean gender;
+    @Column(name = "gender", nullable = true, columnDefinition = "tinyint(1) default true")
+    private boolean gender = true;
 
-    @Column(nullable = true, columnDefinition = "boolean default true")
-    private boolean isActive;
+    @Column(name = "is_active", columnDefinition = "tinyint(1) default true")
+    private Boolean isActive = true;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
