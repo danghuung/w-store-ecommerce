@@ -34,8 +34,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/register", "/login").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/register", "/login").permitAll();
 
         return http.build();
     }
