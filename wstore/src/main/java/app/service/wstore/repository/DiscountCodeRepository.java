@@ -8,4 +8,6 @@ import app.service.wstore.entity.DiscountCode;
 @Repository
 public interface DiscountCodeRepository extends JpaRepository<DiscountCode, Integer> {
     Boolean existsByCode(String code);
+
+    DiscountCode findByCode(String code);
 }

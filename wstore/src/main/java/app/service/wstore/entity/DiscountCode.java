@@ -28,4 +28,5 @@ public class DiscountCode extends BaseEntity {
 
     @Column(name = "is_active", columnDefinition = "tinyint(1) default true")
     private Boolean isActive = true;
+
 }
