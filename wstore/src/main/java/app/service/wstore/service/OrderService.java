@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import app.service.wstore.dto.OrderDetailDto;
@@ -29,9 +28,6 @@ import app.service.wstore.repository.UserRepository;
 @Service
 public class OrderService {
 
-    /**
-     *
-     */
     private static final String ADMIN = "ADMIN";
 
     @Autowired
@@ -88,7 +84,7 @@ public class OrderService {
         return result;
     }
 
-    public OrderDto getDettailOrder(int id, UserDetails currentUser) {
+    public OrderDto getDettailOrder(int id, CustomUserDetails currentUser) {
         User user = userRepository.getUser(currentUser);
 
         Order order = orderRepositoty.findById(id)

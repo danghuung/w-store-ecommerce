@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import app.service.wstore.dto.AddressDto;
 import app.service.wstore.entity.Address;
+import app.service.wstore.entity.CustomUserDetails;
 import app.service.wstore.entity.User;
 import app.service.wstore.exception.ErrorResponse;
 import app.service.wstore.exception.NotFoundException;
@@ -30,7 +30,7 @@ public class AddressService {
     private ModelMapper modelMapper;
 
     // Get List Address of currentUser
-    public List<AddressDto> getList(UserDetails currentUser) {
+    public List<AddressDto> getList(CustomUserDetails currentUser) {
         User user = userRepository.getUser(currentUser);
         List<Address> addresses = addressRepository.findByUser(user);
 
@@ -43,7 +43,7 @@ public class AddressService {
     }
 
     // Get Detail Address of currenUser
-    public AddressDto getDetail(int id, UserDetails currentUser) {
+    public AddressDto getDetail(int id, CustomUserDetails currentUser) {
         User user = userRepository.getUser(currentUser);
 
         Address address = addressRepository.findById(id)
@@ -57,7 +57,7 @@ public class AddressService {
     }
 
     // Create Address
-    public AddressDto create(AddressDto addressDto, UserDetails currentUser) {
+    public AddressDto create(AddressDto addressDto, CustomUserDetails currentUser) {
         User user = userRepository.getUser(currentUser);
 
         Address address = modelMapper.map(addressDto, Address.class);
@@ -67,7 +67,7 @@ public class AddressService {
     }
 
     // Update Address
-    public AddressDto update(int id, AddressDto addressDto, UserDetails currentUser) {
+    public AddressDto update(int id, AddressDto addressDto, CustomUserDetails currentUser) {
         User user = userRepository.getUser(currentUser);
         Address address = addressRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Address Id not exist!"));
@@ -83,7 +83,7 @@ public class AddressService {
     }
 
     // Delete Address
-    public ErrorResponse delete(int id, UserDetails currentUser) {
+    public ErrorResponse delete(int id, CustomUserDetails currentUser) {
         User user = userRepository.getUser(currentUser);
 
         Address address = addressRepository.findById(id)
