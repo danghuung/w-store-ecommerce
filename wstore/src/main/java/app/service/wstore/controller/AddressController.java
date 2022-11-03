@@ -29,14 +29,16 @@ public class AddressController {
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('CUSTOMER')")
-    public ResponseEntity<?> getListAddressOfUser(@CurrentUser CustomUserDetails emailCurrentUser) {
-        return new ResponseEntity<>(addressService.getList(emailCurrentUser), HttpStatus.OK);
+    public ResponseEntity<?> getListAddressOfUser(@CurrentUser CustomUserDetails currentUser) {
+        System.out.println(currentUser.getAuthorities());
+        return new ResponseEntity<>(addressService.getList(currentUser), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<?> getListDetailAddressOfUser(@PathVariable int id,
             @CurrentUser CustomUserDetails currentUser) {
+
         return new ResponseEntity<>(addressService.getDetail(id, currentUser), HttpStatus.OK);
     }
 

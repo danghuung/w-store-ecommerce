@@ -28,8 +28,6 @@ import app.service.wstore.repository.UserRepository;
 @Service
 public class OrderService {
 
-    private static final String ADMIN = "ADMIN";
-
     @Autowired
     private OrderRepositoty orderRepositoty;
 
@@ -52,33 +50,23 @@ public class OrderService {
     public List<OrderDto> getListOrder(CustomUserDetails currentUser) {
         User user = userRepository.getUser(currentUser);
 
+        List<Order> orders = orderRepositoty.findByCreatedBy(user.getId());
+
         ArrayList<OrderDto> result = new ArrayList<>();
 
-        if (user.getRoles().contains(ADMIN)) {
-            List<Order> orders = orderRepositoty.findAll();
+        for (Order order : orders) {
 
-            for (Order order : orders) {
+            Set<OrderDetail> orderDetails = orderDetailRepository.findByOrder(order);
+            Set<OrderDetailDto> orderDetailDtos = new HashSet<>();
 
-                result.add(modelMapper.map(order, OrderDto.class));
+            for (OrderDetail orderDetail : orderDetails) {
+                orderDetailDtos.add(modelMapper.map(orderDetail, OrderDetailDto.class));
             }
-        } else {
 
-            List<Order> orders = orderRepositoty.findByCreatedBy(user.getId());
+            OrderDto resultOrderDto = modelMapper.map(order, OrderDto.class);
+            resultOrderDto.setOrderDetails(orderDetailDtos);
 
-            for (Order order : orders) {
-
-                Set<OrderDetail> orderDetails = orderDetailRepository.findByOrder(order);
-                Set<OrderDetailDto> orderDetailDtos = new HashSet<>();
-
-                for (OrderDetail orderDetail : orderDetails) {
-                    orderDetailDtos.add(modelMapper.map(orderDetail, OrderDetailDto.class));
-                }
-
-                OrderDto resultOrderDto = modelMapper.map(order, OrderDto.class);
-                resultOrderDto.setOrderDetails(orderDetailDtos);
-
-                result.add(resultOrderDto);
-            }
+            result.add(resultOrderDto);
         }
 
         return result;
