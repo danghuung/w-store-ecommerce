@@ -47,7 +47,7 @@ public class OrderService {
     private ModelMapper modelMapper;
 
     // Get All Order
-    public List<OrderDto> getListOrder(CustomUserDetails currentUser) {
+    public List<OrderDto> getListOrderForCustomer(CustomUserDetails currentUser) {
         User user = userRepository.getUser(currentUser);
 
         List<Order> orders = orderRepositoty.findByCreatedBy(user.getId());
@@ -72,7 +72,31 @@ public class OrderService {
         return result;
     }
 
-    public OrderDto getDettailOrder(int id, CustomUserDetails currentUser) {
+    // List All order with role Admin
+    public List<OrderDto> getListOrderForAdmin() {
+        List<Order> orders = orderRepositoty.findAll();
+        ArrayList<OrderDto> result = new ArrayList<>();
+
+        for (Order order : orders) {
+            Set<OrderDetail> orderDetails = orderDetailRepository.findByOrder(order);
+            Set<OrderDetailDto> orderDetailDtos = new HashSet<>();
+
+            for (OrderDetail orderDetail : orderDetails) {
+                orderDetailDtos.add(modelMapper.map(orderDetail, OrderDetailDto.class));
+            }
+
+            OrderDto resultOrderDto = modelMapper.map(order, OrderDto.class);
+            resultOrderDto.setOrderDetails(orderDetailDtos);
+
+            result.add(resultOrderDto);
+
+        }
+
+        return result;
+    }
+
+    // Get Detail order for owner
+    public OrderDto getDettailOrderForCustomer(int id, CustomUserDetails currentUser) {
         User user = userRepository.getUser(currentUser);
 
         Order order = orderRepositoty.findById(id)
@@ -146,5 +170,15 @@ public class OrderService {
         resultOrder.setOrderDetails(setResultOrderDetailDto);
 
         return resultOrder;
+    }
+
+    public OrderDto updateStatusOrder(int id, OrderDto orderDto) {
+        orderRepositoty.findById(id)
+                .orElseThrow(() -> new NotFoundException("Order id not found!"));
+
+        orderDto.setId(id);
+        Order order = modelMapper.map(orderDto, Order.class);
+
+        return modelMapper.map(orderRepositoty.save(order), OrderDto.class);
     }
 }

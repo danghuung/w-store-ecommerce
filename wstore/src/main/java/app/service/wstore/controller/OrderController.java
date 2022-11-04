@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,13 +28,16 @@ public class OrderController {
     @GetMapping("")
     @PreAuthorize("hasAnyAuthority('CUSTOMER', 'ADMIN')")
     public ResponseEntity<?> getListOrder(@CurrentUser CustomUserDetails currentUser) {
-        return new ResponseEntity<>(orderService.getListOrder(currentUser), HttpStatus.OK);
+        if (currentUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+            return new ResponseEntity<>(orderService.getListOrderForAdmin(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(orderService.getListOrderForCustomer(currentUser), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<?> getOrder(@PathVariable int id, @CurrentUser CustomUserDetails currentUser) {
-        return new ResponseEntity<>(orderService.getDettailOrder(id, currentUser), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getDettailOrderForCustomer(id, currentUser), HttpStatus.OK);
     }
 
     @PostMapping("")
@@ -45,5 +49,11 @@ public class OrderController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.toString(), HttpStatus.BAD_GATEWAY);
         }
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> updateStatusOrder(@PathVariable int id, @RequestBody OrderDto orderDto) {
+        return new ResponseEntity<>(orderService.updateStatusOrder(id, orderDto), HttpStatus.OK);
     }
 }
