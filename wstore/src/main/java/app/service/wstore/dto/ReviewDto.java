@@ -12,5 +12,7 @@ public class ReviewDto extends BaseEntity {
 
     private int rating;
 
-    private ProductDto productId;
+    private int productId;
+
+    private int orderId;
 }

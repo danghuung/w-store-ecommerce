@@ -2,7 +2,6 @@ package app.service.wstore.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -26,7 +25,11 @@ public class Review extends BaseEntity {
     @Column(name = "rating", nullable = false)
     private int rating;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Category.class)
-    @JoinColumn(name = "product_id")
+    @ManyToOne(targetEntity = Product.class)
+    @JoinColumn(name = "product_id", updatable = false)
     private Product product;
+
+    @ManyToOne(targetEntity = Order.class)
+    @JoinColumn(name = "order_id", updatable = false)
+    private Order order;
 }
