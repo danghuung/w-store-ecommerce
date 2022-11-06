@@ -27,9 +27,9 @@ public class CustomExceptionHandler {
         return new ErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
-    @ExceptionHandler(LoginException.class)
+    @ExceptionHandler(ReviewException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handlerLoginException(LoginException ex, WebRequest req) {
+    public ErrorResponse handlerLoginException(ReviewException ex, WebRequest req) {
         return new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
