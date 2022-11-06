@@ -14,5 +14,6 @@ public class UserDto {
     private String fullname;
     private String birthday;
     private boolean gender;
+    private String stripeAccount;
     private Set<RoleDto> roles;
 }

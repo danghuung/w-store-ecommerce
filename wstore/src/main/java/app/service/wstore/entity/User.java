@@ -40,6 +40,9 @@ public class User {
     @Column(name = "gender", nullable = true, columnDefinition = "tinyint(1) default true")
     private boolean gender = true;
 
+    @Column(name = "stripe_account", nullable = false)
+    private String stripeAccount;
+
     @Column(name = "is_active", columnDefinition = "tinyint(1) default true")
     private Boolean isActive = true;
 
