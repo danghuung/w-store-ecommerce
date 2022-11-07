@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.stripe.exception.StripeException;
+
 import app.service.wstore.dto.OrderDetailDto;
 import app.service.wstore.dto.OrderDto;
 import app.service.wstore.entity.CustomUserDetails;
@@ -24,9 +26,13 @@ import app.service.wstore.repository.OrderDetailRepository;
 import app.service.wstore.repository.OrderRepositoty;
 import app.service.wstore.repository.ProductRepository;
 import app.service.wstore.repository.UserRepository;
+import app.service.wstore.util.StripeClient;
 
 @Service
 public class OrderService {
+
+    @Autowired
+    private StripeClient stripeClient;
 
     @Autowired
     private OrderRepositoty orderRepositoty;
@@ -120,7 +126,7 @@ public class OrderService {
         throw new UnauthorizedException("You Dont Have Permission!");
     }
 
-    public OrderDto create(OrderDto orderDto) {
+    public OrderDto create(OrderDto orderDto, CustomUserDetails currentUser, String cardId) throws StripeException {
         Order order = new Order();
 
         order.setFullName(orderDto.getFullName());
@@ -168,6 +174,10 @@ public class OrderService {
 
         OrderDto resultOrder = modelMapper.map(orderRepositoty.save(order), OrderDto.class);
         resultOrder.setOrderDetails(setResultOrderDetailDto);
+
+        // Checkout order with Stripe
+        User user = userRepository.getUser(currentUser);
+        stripeClient.checkOutOrder(user.getStripeAccount(), cardId, order.getTotal(), order.getId());
 
         return resultOrder;
     }

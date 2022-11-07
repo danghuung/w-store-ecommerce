@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stripe.exception.StripeException;
+
 import app.service.wstore.dto.OrderDto;
 import app.service.wstore.entity.CustomUserDetails;
 import app.service.wstore.jwt.CurrentUser;
@@ -40,12 +42,13 @@ public class OrderController {
         return new ResponseEntity<>(orderService.getDettailOrderForCustomer(id, currentUser), HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PostMapping("/{card_id}")
     @PreAuthorize("hasAuthority('CUSTOMER')")
-    public ResponseEntity<?> createOrder(@RequestBody OrderDto orderDto) {
+    public ResponseEntity<?> createOrder(@RequestBody OrderDto orderDto, @CurrentUser CustomUserDetails currentUser,
+            @PathVariable String card_id) throws StripeException {
         try {
 
-            return new ResponseEntity<>(orderService.create(orderDto), HttpStatus.CREATED);
+            return new ResponseEntity<>(orderService.create(orderDto, currentUser, card_id), HttpStatus.CREATED);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.toString(), HttpStatus.BAD_GATEWAY);
         }
