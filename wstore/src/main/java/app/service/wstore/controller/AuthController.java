@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stripe.exception.StripeException;
+
 import app.service.wstore.dto.RegisterDto;
 import app.service.wstore.entity.CustomUserDetails;
 import app.service.wstore.exception.DuplicateRecordException;
@@ -37,7 +39,7 @@ public class AuthController {
     private JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterDto registerDto) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterDto registerDto) throws StripeException {
 
         if (userService.checkEmail(registerDto.getEmail())) {
             throw new DuplicateRecordException("Email already is taken!");

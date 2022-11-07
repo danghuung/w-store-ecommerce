@@ -10,6 +10,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
+
 import app.service.wstore.dto.RegisterDto;
 import app.service.wstore.dto.UserDto;
 import app.service.wstore.entity.CustomUserDetails;
@@ -17,9 +20,13 @@ import app.service.wstore.entity.Role;
 import app.service.wstore.entity.User;
 import app.service.wstore.repository.RoleRepository;
 import app.service.wstore.repository.UserRepository;
+import app.service.wstore.util.StripeClient;
 
 @Service
 public class UserService implements UserDetailsService {
+
+    @Autowired
+    private StripeClient stripeClient;
 
     @Autowired
     private UserRepository userRepository;
@@ -37,11 +44,16 @@ public class UserService implements UserDetailsService {
         return userRepository.existsByEmail(email);
     }
 
-    public User createCustomer(RegisterDto registerDto) {
+    public User createCustomer(RegisterDto registerDto) throws StripeException {
         registerDto.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         Role setRole = roleRepository.findByName("CUSTOMER");
 
         User user = modelMapper.map(registerDto, User.class);
+
+        Customer customer = stripeClient.createCustomer(registerDto.getEmail());
+
+        user.setStripeAccount(customer.getId());
+
         user.addRole(setRole);
 
         return userRepository.saveAndFlush(user);
