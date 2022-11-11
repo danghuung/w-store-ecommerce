@@ -18,7 +18,7 @@ public class StripeClient {
 
     @Autowired
     StripeClient() {
-        Stripe.apiKey = "sk_test_51LXILOJvtSsB9DmY807yqCiAQ3EzpKLd62eSU2G9AmbYiSTnGv8MN7Eb368nRPmD3sw2SEkJdYZZZ7mImkgn3I5T00Br7ykapJ";
+        Stripe.apiKey = "Test secret key";
     }
 
     // Create Customer in Stripe
