@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class CartDto extends BaseEntity {
 
-    private ProductDto products;
+    private int productId;
 
     private int quantity;
 }
